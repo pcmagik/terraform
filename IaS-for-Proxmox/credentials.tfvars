@@ -1,4 +1,3 @@
-pm_api_url = "https://192.168.0.200:8006/api2/json"
-cloudinit_template_name = "debian-11-cloudinit-template"
-proxmox_node = "dc"
-ssh_key = "[YOUR_SSH_KEY]"
+proxmox_api_url = "https://0.0.0.0:8006/api2/json"  # Your Proxmox IP Address
+proxmox_api_token_id = "terraform@pam!terraform"  # API Token ID
+proxmox_api_token_secret = "your-api-token-secret"
