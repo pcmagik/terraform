@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "proxmox" {
-  # url is the hostname (FQDN if you have one) for the proxmox host you'd like to connect to to issue the commands. my proxmox host is 'prox-1u'. Add /api2/json at the end for the API
+  # url is the hostname (FQDN if you have one) for the proxmox host you'd like to connect to to issue the commands. my proxmox host is 'pve'. Add /api2/json at the end for the API
   pm_api_url = "https://0.0.0.0:8006/api2/json"
 
   # api token id is in the form of: <username>@pam!<tokenId>
