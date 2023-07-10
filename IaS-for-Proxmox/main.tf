@@ -1,53 +1,59 @@
-variable "cloudinit_template_name" {
-    type = string 
-}
+# Proxmox Full-Clone
+# ---
+# Create a new VM from a clone
 
-variable "proxmox_node" {
-    type = string
-}
+resource "proxmox_vm_qemu" "your-vm" {
 
-variable "ssh_key" {
-  type = string 
-  sensitive = true
-}
+    # VM General Settings
+    target_node = "your-proxmox-node"
+    vmid = "100"
+    name = "vm-name"
+    desc = "Description"
 
-resource "proxmox_vm_qemu" "k8s-1" {
-  count = 3
-  name = "k8s-1${count.index + 1}"
-  target_node = var.proxmox_node
-  clone = var.cloudinit_template_name
-  agent = 1
-  os_type = "cloud-init"
-  cores = 4
-  sockets = 1
-  cpu = "host"
-  memory = 4096
-  scsihw = "virtio-scsi-pci"
-  bootdisk = "scsi0"
+    # VM Advanced General Settings
+    onboot = true
 
-  disk {
-    slot = 0
-    size = "40G"
-    type = "scsi"
-    storage = "pve1"
-  }
+    # VM OS Settings
+    clone = "your-clone"
 
-  network {
-    model = "virtio"
-    bridge = "vmbr2"
-  }
-  
-  lifecycle {
-    ignore_changes = [
-      network,
-    ]
-  }
+    # VM System Settings
+    agent = 1
 
-  ipconfig0 = "ip=172.20.0.20${count.index + 1}/24,gw=172.20.0.1"
-  nameserver = "172.20.0.31"
-  
-  sshkeys = <<EOF
-  ${var.ssh_key}
-  EOF
+    # VM CPU Settings
+    cores = 1
+    sockets = 1
+    cpu = "host"    
+
+    # VM Memory Settings
+    memory = 1024
+
+    # VM Network Settings
+    network {
+        bridge = "vmbr0"
+        model  = "virtio"
+    }
+
+    disk {
+        storage = "local-lvm"
+        type = "virtio"
+        size = "20G"
+    }
+
+    # VM Cloud-Init Settings
+    os_type = "cloud-init"
+
+    # (Optional) IP Address and Gateway
+    ipconfig0 = "ip=0.0.0.0/0,gw=0.0.0.0"
+
+    # If your packer image template already has a user and ssh key created then only use this step
+    # to create an additional user and ssh key pair
+
+    # (Optional) Default User
+    # ciuser = "your-username"
+    # (Optional) Add your SSH KEY
+
+    # sshkeys = <<EOF
+    # #YOUR-PUBLIC-SSH-KEY
+    # EOF
 
 }
